@@ -1,0 +1,59 @@
+{
+    "colors": [
+        {
+            "id": 1,
+            "name": "Vert foncé",
+            "color_code": "#53853d"
+        },
+        {
+            "id": 2,
+            "name": "Vert CETIC",
+            "color_code": "#6fb052"
+        },
+        {
+            "id": 3,
+            "name": "Vert clair",
+            "color_code": "#d7e6cc"
+        },
+        {
+            "id": 4,
+            "name": "Gris foncé",
+            "color_code": "#5a5a5a"
+        },
+        {
+            "id": 5,
+            "name": "Gris moyen",
+            "color_code": "#808080"
+        },
+        {
+            "id": 6,
+            "name": "Gris clair",
+            "color_code": "#cccccc"
+        },
+        {
+            "id": 7,
+            "name": "Rouge ECS",
+            "color_code": "#f62f00"
+        },
+        {
+            "id": 8,
+            "name": "Jaune SSE",
+            "color_code": "#feb602"
+        },
+        {
+            "id": 9,
+            "name": "Bleu SST",
+            "color_code": "#00b0f0"
+        },
+        {
+            "id": 10,
+            "name": "Bleu foncé",
+            "color_code": "#0070c0"
+        },
+        {
+            "id": 11,
+            "name": "Mauve",
+            "color_code": "#7030a0"
+        }
+    ]
+}
