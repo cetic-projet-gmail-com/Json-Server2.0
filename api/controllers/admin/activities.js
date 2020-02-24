@@ -87,7 +87,7 @@ exports.delActivity = async(req, res) => {
         res.jsonp({ "infos": activity.name + " has been successefully deleted" });
         fs.writeFileSync(process.cwd() + '/api/models/activities.json', JSON.stringify({ "activities": resultData }));
     } else {
-        res.jsonp({
+        res.status(422).jsonp({
             "errors": {
                 "status": "422",
                 "source": { "pointer": "/administration/activities/:" + req.params.id },

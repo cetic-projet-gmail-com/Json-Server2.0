@@ -1,11 +1,16 @@
 const Express = require('express');
-
+const Cors = require('cors');
 
 const bodyParser = require('body-parser');
 
 const App = Express();
 
 //GLOBAL MIDDLEWARES
+var corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+App.use(Cors(corsOptions))
 App.use(bodyParser.json());
 const routes = process.cwd() + '/api/routes/';
 console.log(routes)

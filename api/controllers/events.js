@@ -5,7 +5,7 @@ let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 
 let tasks = fs.readFileSync(process.cwd()+'/api/models/tasks.json');
 const {  validationResult } = require('express-validator');
-var {formatISO9075,differenceInHours, parseISO} = require('date-fns');
+var {formatISO9075,differenceInMinutes, parseISO} = require('date-fns');
 //? Create
 exports.postEvent = async(req,res) => {
     const errors = validationResult(req);
@@ -19,7 +19,7 @@ exports.postEvent = async(req,res) => {
         let resultData = await JSON.parse(events).events;
         let start = parseISO(body.start);
         let end = parseISO(body.end);
-        let duration = await differenceInHours(end, start);
+        let duration = await differenceInMinutes(end, start);
         let newEvent = {
             "id": Date.now(),
             "duration": duration,
@@ -47,7 +47,7 @@ exports.upEvent = async (req, res) => {
         let event = resultData[indexEvent];
         let start = body.start? parseISO(body.start): parseISO(event.start);
         let end = body.end? parseISO(body.end): parseISO(event.end);
-        let duration = await differenceInHours(end, start);
+        let duration = await differenceInMinutes(end, start);
         console.log(duration)
         let eventModified = {
             "id": event.id,
@@ -85,7 +85,7 @@ exports.delEvent = async(req, res) => {
         res.jsonp({ "infos": event.description + " has been successefully deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }));
     } else {
-        res.jsonp({
+        res.status(422).jsonp({
             "errors": {
                 "status": "422",
                 "source": { "pointer": "/events/:" + req.params.id },

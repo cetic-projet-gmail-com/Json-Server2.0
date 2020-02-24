@@ -6,7 +6,7 @@ const url = (process.cwd()+'/api/controllers/admin/');
 const usersController = require(url +  'users');
 const activitiesController = require(url +  'activities');
 const tasksController = require(url +  'tasks');
-
+const departementsController = require(url + 'departements')
 //* ---------------------------------- Users --------------------------------- */
 
 const validPostUser = [
@@ -56,5 +56,17 @@ Router.route('/tasks')
 Router.route('/tasks/:id')
     .delete(tasksController.delTask)
     .patch(tasksController.modifyTask)
+;
+
+//* ------------------------------- Depatements ------------------------------ */
+
+const validPostDepartement = [
+    check("name").notEmpty(),
+    check("responsable_id").notEmpty()
+];
+Router.route('/departements')
+    .get(departementsController.getDeparts)
+    .post(validPostDepartement, departementsController.setDepart)
+    .patch(departementsController.upDepart)
 ;
 module.exports = Router;

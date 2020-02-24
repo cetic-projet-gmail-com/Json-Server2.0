@@ -10,7 +10,7 @@ const validPostEvent = [
     check("start").isISO8601(),
     check("end").isISO8601(),
     check("description").notEmpty(),
-]
+];
 
 Router.route('/')
     .post(validPostEvent, eventsController.postEvent)
@@ -18,5 +18,5 @@ Router.route('/')
 Router.route('/:id')
     .patch(eventsController.upEvent)
     .delete(eventsController.delEvent)
-
+;
 module.exports = Router;
