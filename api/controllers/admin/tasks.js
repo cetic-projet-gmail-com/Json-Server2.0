@@ -22,13 +22,17 @@ exports.postTasks = async (req, res) => {
             "description": body.description,
             "done": body.done? body.done: "",
             "created": formatISO9075(Date.now()),
-            "updated": null
+            "updated": formatISO9075(Date.now())
         }
         resultData.push(newTask);
         fs.writeFileSync(process.cwd()+'/api/models/tasks.json', JSON.stringify({ "tasks": resultData }));
-        res.jsonp(newTask)
+        res.json({"infos" : "task created", "data":{"task":newTask}});
     } else {
-        res.jsonp({"error" : "activities parent not find or not been set (activies_id)"})
+        res.json({ "errors": {
+            "source": "/administration/tasks/",
+            "title": "activity_id Not Found",
+            "detail": "Check if the id has been altered."}
+        })
     }
 }
 //? Update
@@ -45,23 +49,21 @@ exports.modifyTask = async (req, res) => {
             "name": body.name? body.name: task.name,
             "description": body.description? body.description: task.description,
             "done": body.done? body.done: task.done,
-            "created": task.created,
+            "created": formatISO9075(Date.now()),
             "updated": formatISO9075(Date.now())
         }
         resultData[indexTask] = taskModified;
         
         fs.writeFileSync(process.cwd()+'/api/models/tasks.json', JSON.stringify({ "tasks": resultData }))
-        res.jsonp({ "task_infos": resultData[indexTask] })
+        res.json({"infos": "task updated", "data": {"task" : resultData[indexTask] }});
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/tasks/:" + req.params.id },
+                "source": "/administration/tasks/:" + req.params.id ,
                 "title": "Task Not Found",
                 "detail": "Check if the id has been altered."
             }
-
-        })
+        });
     }
 }
 //? Delete
@@ -73,13 +75,12 @@ exports.delTask = async (req, res) => {
         
         let task = resultData[indexTask];
         resultData.splice(indexTask, 1);
-        res.jsonp({ "infos": task.name+ " has been successefully deleted" });
+        res.json({ "infos": task.name+ " deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/tasks.json', JSON.stringify({ "tasks": resultData }));
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/tasks/:" + req.params.id },
+                "source": "/administration/tasks/:" + req.params.id,
                 "title": "Task Not Found",
                 "detail": "Check if the id has been altered."
             }

@@ -24,7 +24,7 @@ exports.index = async (req, res) => {
         });
 
         let route = '/home?display=day&date='
-        res.jsonp({
+        res.json({
             "links": {
                 "currentDay": route + dayFormated,
                 "prevDay": route + format(addDays(Date.parse(day), 1), dateFormat),
@@ -50,7 +50,7 @@ exports.index = async (req, res) => {
         let prevMonth = month === 0 ? "12&year" + (year - 1) : month + "&year=" + year;
         let nextMonth = month === 11 ? "01&year" + (year + 1) : (month + 2) + "&year=" + year;
         let route = "/home?display=month&month=";
-        res.jsonp({
+        res.json({
             "links": {
                 "currentMonth": route + (month + 1) + "&year=" + year,
                 "prevMonth": route + prevMonth,
@@ -80,7 +80,7 @@ exports.index = async (req, res) => {
 
         let route = "/home?week=";
 
-        res.jsonp({
+        res.json({
             "links": {
                 "currentWeek": route + weekNumber + "&year=" + year,
                 "prevWeek": route + prevWeek,
@@ -93,5 +93,4 @@ exports.index = async (req, res) => {
             }
         });
     }
-
 }

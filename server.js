@@ -13,16 +13,21 @@ var corsOptions = {
 App.use(Cors(corsOptions))
 App.use(bodyParser.json());
 const routes = process.cwd() + '/api/routes/';
-console.log(routes)
 const GeneralRouter = require(routes +'general');
 const AdminRouter = require(routes+'admin');
 const EventsRouter = require(routes + 'events');
-
+// Show method of all request
+App.all('*', (req, res, next) => {
+    console.log(req.method + " " +req.path);
+    
+    next();
+})
 // SPECIFIC ROUTES
 App.use('/administration', AdminRouter);
-App.use('/events', EventsRouter)
+App.use('/events', EventsRouter);
 App.use('/', GeneralRouter);
+
 
 App.listen(3000, () => {
     console.log('json server started on port 3000')
-})
+});

@@ -26,16 +26,21 @@ exports.postEvent = async(req,res) => {
             "start": formatISO9075(start),
             "end": formatISO9075(end),
             "created": formatISO9075(Date.now()),
-            "updated": null,
+            "updated": formatISO9075(Date.now()),
             "description": body.description,
             "user_id": usersArr[Math.floor(Math.random() * Math.floor(usersArr.length))].id,
             "tasks_id": body.tasks_id
         }
         resultData.push(newEvent);
         fs.writeFileSync(process.cwd()+  '/api/models/events.json', JSON.stringify({ "events": resultData }));
-        res.jsonp(newEvent)
+        res.json({"infos" : "event created", "data" : {"event" : newEvent}});
     } else {
-        res.jsonp({"error" : "event parent not find or not been set (tasks_id)"})
+        res.status(200).json({
+            "errors": {
+                "source": "/events",
+                "title": "tasks_id Not Found",
+                "detail": "Check if the id has been altered."
+            }});
     }
 }
 //? Update
@@ -62,12 +67,11 @@ exports.upEvent = async (req, res) => {
         }
         resultData[indexEvent] = eventModified;
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }))
-        res.jsonp({ "event_infos": resultData[indexEvent] })
+        res.json({ "infos": "event modified", "data": {"event" : resultData[indexEvent] }});
     } else {
-        res.jsonp({
+        res.status(422).jsonp({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/events/:" + req.params.id },
+                "source": "/administration/events/:" + req.params.id ,
                 "title": "Event Not Found",
                 "detail": "Check if the id has been altered."
             }
@@ -82,13 +86,12 @@ exports.delEvent = async(req, res) => {
     let event = resultData[indexEvent];
     if (indexEvent !== -1) {
         resultData.splice(indexEvent, 1);
-        res.jsonp({ "infos": event.description + " has been successefully deleted" });
+        res.json({ "infos": event.description + " deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }));
     } else {
         res.status(422).jsonp({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/events/:" + req.params.id },
+                "source": "/events/:" + req.params.id,
                 "title": "Event Not Found",
                 "detail": "Check if the id has been altered."
             }

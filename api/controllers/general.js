@@ -6,19 +6,19 @@ exports.login = async (req, res) => {
     const indexUser = await usersArr.findIndex((element) => element.login == req.body.login);
     if (indexUser !== -1) {
         if (usersArr[indexUser].password === req.body.password) {
-            res.jsonp({ "infos": "youre now connected" })
+            res.json({ "infos": "youre now connected" })
         } else {
-            res.jsonp({
+            res.status(422).json({
                 "errors": {
-                    "source": { "pointer": "/login" },
+                    "source": "/login",
                     "title": "bad password",
                 }
             });
         }
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "source": { "pointer": "/login" },
+                "source": "/login" ,
                 "title": "Name of user not find"
             }
         })
@@ -27,5 +27,5 @@ exports.login = async (req, res) => {
 exports.profil = async (req, res) => {
     const usersArr = JSON.parse(users).users;
     let userRandom = usersArr[Math.floor(Math.random() * Math.floor(usersArr.length))];
-    res.jsonp({ "user_infos": userRandom });
+    res.json({ "data":  {"profil" :  userRandom }});
 }

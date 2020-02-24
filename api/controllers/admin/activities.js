@@ -17,7 +17,7 @@ exports.getActivities = async (req, res) => {
             return { "id": element.id, "name": element.name, "description": element.description };
         });
     let route = "/administration/activities?page=";
-    res.jsonp({
+    res.json({
         "links": {
             "current": route + page + "&nbre=" + nbre,
             "previous": page > 1 ? route + (page - 1) + "&nbre=" + nbre : undefined,
@@ -38,12 +38,11 @@ exports.getUniqueActivity = async (req, res) => {
     });
     //? Check if the activity has been found
     if (indexActivity !== -1) {
-        res.jsonp({ "activitiy": activitiesArr[indexActivity], "tasks" :tasksArr})
+        res.jsonp({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr}})
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/activities/:" + req.params.id },
+                "source": "/administration/activities/:" + req.params.id,
                 "title": "Activitie Not Found",
                 "detail": "Check if the id has been altered."
             }
@@ -63,9 +62,9 @@ exports.postActivity = async (req, res) => {
         "name": body.name,
         "description": body.description,
         "color_code": body.color_code,
-        "status" : "ongoing",
+        "ended" : false,
         "created": formatISO9075(Date.now()),
-        "updated": null,
+        "updated": formatISO9075(Date.now()),
         "id": Date.now(),
         "a_type": {
             "name": "",
@@ -74,7 +73,7 @@ exports.postActivity = async (req, res) => {
     }
     resultData.push(newActivity);
     fs.writeFileSync(process.cwd() + '/api/models/activities.json', JSON.stringify({ "activities": resultData }));
-    res.jsonp(newActivity)
+    res.json({"infos" : "activity added", "data" : {"activity" : newActivity}});
 }
 //? Remove
 exports.delActivity = async(req, res) => {
@@ -84,18 +83,16 @@ exports.delActivity = async(req, res) => {
     let activity = resultData[indexActivity];
     if (indexActivity !== -1) {
         resultData.splice(indexActivity, 1);
-        res.jsonp({ "infos": activity.name + " has been successefully deleted" });
+        res.json({ "infos": activity.name + " deleted" });
         fs.writeFileSync(process.cwd() + '/api/models/activities.json', JSON.stringify({ "activities": resultData }));
     } else {
-        res.status(422).jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/activities/:" + req.params.id },
+                "source": "/administration/activities/:" + req.params.id,
                 "title": "Activity Not Found",
                 "detail": "Check if the id has been altered."
             }
-
-        })
+        });
     }
 }
 //? Update
@@ -109,7 +106,7 @@ exports.modifyActivity = async(req, res) => {
             "name": body.name ? body.name : activity.name,
             "description": body.description? body.description: activity.description,
             "color_code": body.color_code? body.color_code: activity.color_code,
-            "status" : body.done? body.done: activity.done,
+            "ended" : body.done? body.done: activity.done,
             "created": activity.created,
             "updated": formatISO9075(Date.now()),
             "id": activity.id,
@@ -117,16 +114,14 @@ exports.modifyActivity = async(req, res) => {
         }
         resultData[indexActivity] = activityModified;
         fs.writeFileSync(process.cwd()+'/api/models/activities.json', JSON.stringify({ "activities": resultData }))
-        res.jsonp({ "activity_infos": resultData[indexActivity] })
+        res.json({ "infos" : "activity updated", "data": {"activity" : resultData[indexActivity] }})
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/activities/:" + req.params.id },
+                "source": "/administration/activities/:" + req.params.id,
                 "title": "Activity Not Found",
                 "detail": "Check if the id has been altered."
             }
-
-        })
+        });
     }
 }

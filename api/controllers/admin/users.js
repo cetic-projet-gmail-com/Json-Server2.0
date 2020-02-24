@@ -17,7 +17,7 @@ exports.getUsers = async (req, res) => {
             return { "id": element.id, "firstname": element.firstname, "lastname": element.lastname };
         });
     let route = "/administration/users?page=";
-    res.jsonp({
+    res.json({
         "links": {
             "current": route + page + "&nbre=" + nbre,
             "previous": page > 1 ? route + (page - 1) + "&nbre=" + nbre : undefined,
@@ -32,12 +32,11 @@ exports.getUniqueUser = async (req, res) => {
     let usersArr = JSON.parse(users).users;
     const indexUser = usersArr.findIndex((element) => element.id == req.params.id);
     if (indexUser !== -1) {
-        res.jsonp({ "user_infos": usersArr[indexUser] })
+        res.json({ "data": {"user": usersArr[indexUser] }});
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/users/:" + req.params.id },
+                "source": "/administration/users/:" + req.params.id,
                 "title": "User Not Found",
                 "detail": "Check if the id has been altered."
             }
@@ -61,14 +60,14 @@ exports.addUser = async (req, res) => {
         "email": body.email,
         "password": body.password,
         "created": formatISO9075(Date.now()),
-        "updated": null,
+        "updated": formatISO9075(Date.now()),
         "role_id": body.role_id,
         "departement_id": body.departement_id,
         "id": Date.now()
     }
     resultData.push(newUser);
     fs.writeFileSync(process.cwd()+'/api/models/users.json', JSON.stringify({ "users": resultData }));
-    res.jsonp(newUser)
+    res.jsonp({"infos": "user created", "data" : {"user" : newUser}});
 }
 //? Remove
 exports.delUser = async (req,res) => {
@@ -79,13 +78,12 @@ exports.delUser = async (req,res) => {
         
         let user = resultData[indexUser];
         resultData.splice(indexUser, 1);
-        res.jsonp({ "infos": user.firstname + " " + user.lastname + " has been successefully deleted" });
+        res.jsonp({ "infos": user.login + " deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/users.json', JSON.stringify({ "users": resultData }));
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/users/:" + req.params.id },
+                "source": "/administration/users/:" + req.params.id,
                 "title": "User Not Found",
                 "detail": "Check if the id has been altered."
             }
@@ -114,12 +112,11 @@ exports.modifyUser = async (req, res) => {
         resultData[indexUser] = userModified;
         
         fs.writeFileSync(process.cwd()+'/api/models/users.json', JSON.stringify({ "users": resultData }))
-        res.jsonp({ "user_infos": resultData[indexUser] })
+        res.json({ "infos" : "user modified", "data": {"user" : resultData[indexUser] }})
     } else {
-        res.jsonp({
+        res.status(422).json({
             "errors": {
-                "status": "422",
-                "source": { "pointer": "/administration/users/:" + req.params.id },
+                "source": "/administration/users/:" + req.params.id ,
                 "title": "User Not Found",
                 "detail": "Check if the id has been altered."
             }

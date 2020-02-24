@@ -66,7 +66,10 @@ const validPostDepartement = [
 ];
 Router.route('/departements')
     .get(departementsController.getDeparts)
-    .post(validPostDepartement, departementsController.setDepart)
+    .post(validPostDepartement, departementsController.createDepart)
+;
+Router.route('/departements/:id')
     .patch(departementsController.upDepart)
+    .get(departementsController.getUniqueDepart)
 ;
 module.exports = Router;
