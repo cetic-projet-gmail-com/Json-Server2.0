@@ -24,12 +24,12 @@ exports.index = async (req, res) => {
         });
 
         let route = '/home?display=day&date='
-        res.json({
+        res.json({/*
             "links": {
                 "currentDay": route + dayFormated,
                 "prevDay": route + format(addDays(Date.parse(day), 1), dateFormat),
                 "nextDay": route + format(addDays(Date.parse(day), -1), dateFormat)
-            },
+            },*/
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
@@ -47,15 +47,15 @@ exports.index = async (req, res) => {
             let tmpDate = new Date(element.start);
             return tmpDate.getMonth() === month && tmpDate.getFullYear() === year;
         });
-        let prevMonth = month === 0 ? "12&year" + (year - 1) : month + "&year=" + year;
-        let nextMonth = month === 11 ? "01&year" + (year + 1) : (month + 2) + "&year=" + year;
-        let route = "/home?display=month&month=";
+        //let prevMonth = month === 0 ? "12&year" + (year - 1) : month + "&year=" + year;
+        //let nextMonth = month === 11 ? "01&year" + (year + 1) : (month + 2) + "&year=" + year;
+        //let route = "/home?display=month&month=";
         res.json({
-            "links": {
+            /*"links": {
                 "currentMonth": route + (month + 1) + "&year=" + year,
                 "prevMonth": route + prevMonth,
                 "nextMonth": route + nextMonth,
-            },
+            },*/
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
@@ -75,17 +75,17 @@ exports.index = async (req, res) => {
         });
 
         //? Compare params for return the next or the previous year
-        let prevWeek = weekNumber > 1 ? weekNumber - 1 + "&year=" + year : getISOWeeksInYear(new Date(year - 1, 03, 15)) + "&year=" + (year - 1);
-        let nextWeek = weekNumber < getISOWeeksInYear(new Date(year, 03, 15)) ? weekNumber + 1 + "&year=" + year : 1 + "&year=" + (year + 1);
+        //let prevWeek = weekNumber > 1 ? weekNumber - 1 + "&year=" + year : getISOWeeksInYear(new Date(year - 1, 03, 15)) + "&year=" + (year - 1);
+        //let nextWeek = weekNumber < getISOWeeksInYear(new Date(year, 03, 15)) ? weekNumber + 1 + "&year=" + year : 1 + "&year=" + (year + 1);
 
         let route = "/home?week=";
 
-        res.json({
+        res.json({/*
             "links": {
                 "currentWeek": route + weekNumber + "&year=" + year,
                 "prevWeek": route + prevWeek,
                 "nextWeek": route + nextWeek,
-            },
+            },*/
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
