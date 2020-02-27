@@ -1,6 +1,7 @@
 const fs = require('fs');
-let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 
+let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
+/*
 exports.login = async (req, res) => {
     usersArr = JSON.parse(users).users;
     const indexUser = await usersArr.findIndex((element) => element.login == req.body.login);
@@ -23,9 +24,11 @@ exports.login = async (req, res) => {
             }
         })
     }
-}
+}*/
 exports.profil = async (req, res) => {
-    const usersArr = JSON.parse(users).users;
-    let userRandom = usersArr[Math.floor(Math.random() * Math.floor(usersArr.length))];
-    res.json({ "data":  {"profil" :  userRandom }});
+    console.log('ok')
+    const usersArr = await JSON.parse(users).users;
+    // let userRandom = usersArr[Math.floor(Math.random() * Math.floor(usersArr.length))];
+    let index = usersArr.findIndex(element => req.payload._id === element.id)
+    res.json({ "data":  usersArr[index]});
 }
