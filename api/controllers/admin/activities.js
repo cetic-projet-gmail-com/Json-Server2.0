@@ -30,6 +30,7 @@ exports.getActivities = async (req, res) => {
 }
 exports.getUniqueActivity = async (req, res) => {
     const activitiesArr = JSON.parse(activities).activities;
+    const userArr = JSON.parse(users).users;
     //? Get pos of unique activity in the db
     const indexActivity = activitiesArr.findIndex((element) => element.id == req.params.id);
     //? Request of all tasks belongs activity
@@ -37,8 +38,13 @@ exports.getUniqueActivity = async (req, res) => {
         return element.activities_id === activitiesArr[indexActivity].id;
     });
     //? Check if the activity has been found
+    users = await activitiesArr[indexActivity].users.map(element => {
+        console.log(element)
+        let user = userArr.findIndex(ele => element === ele.id);
+        return userArr[user];
+    });
     if (indexActivity !== -1) {
-        res.jsonp({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr}})
+        res.json({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr, "users":users}})
     } else {
         res.status(422).json({
             "errors": {
@@ -65,6 +71,7 @@ exports.postActivity = async (req, res) => {
         "ended" : false,
         "created": formatISO9075(Date.now()),
         "updated": formatISO9075(Date.now()),
+        "users": [],
         "id": Date.now(),
         "a_type": {
             "name": "",
@@ -110,7 +117,8 @@ exports.modifyActivity = async(req, res) => {
             "created": activity.created,
             "updated": formatISO9075(Date.now()),
             "id": activity.id,
-            "a_type": body.a_type? body.a_type: activity.a_type
+            "a_type": body.a_type? body.a_type: activity.a_type,
+            "users": body.users? body.users: activity.users
         }
         resultData[indexActivity] = activityModified;
         fs.writeFileSync(process.cwd()+'/api/models/activities.json', JSON.stringify({ "activities": resultData }))

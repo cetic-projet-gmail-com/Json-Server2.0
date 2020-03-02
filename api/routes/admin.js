@@ -7,6 +7,8 @@ const usersController = require(url +  'users');
 const activitiesController = require(url +  'activities');
 const tasksController = require(url +  'tasks');
 const departementsController = require(url + 'departements')
+const rolesController = require(url + 'roles')
+
 //* ---------------------------------- Users --------------------------------- */
 
 const validPostUser = [
@@ -72,4 +74,10 @@ Router.route('/departements/:id')
     .patch(departementsController.upDepart)
     .get(departementsController.getUniqueDepart)
 ;
+
+//* ---------------------------------- Roles --------------------------------- */
+
+Router.route('/roles')
+    .get(rolesController)
+Router.use((req, res) => {res.status(404).json({"errors":"404 not found!"})})
 module.exports = Router;

@@ -1,6 +1,7 @@
 const fs = require('fs');
 let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 let activities = fs.readFileSync(process.cwd()+'/api/models/activities.json');
+
 let tasks = fs.readFileSync(process.cwd()+'/api/models/tasks.json');
 const {  validationResult } = require('express-validator');
 var {formatISO9075} = require('date-fns');
@@ -37,10 +38,12 @@ exports.postTasks = async (req, res) => {
 }
 //? Update
 exports.modifyTask = async (req, res) => {
+    let body = req.body;
+
     let resultData = await JSON.parse(tasks).tasks;
     const indexTask = resultData.findIndex((element) => element.id == req.params.id);
+
     if (indexTask !== -1) {
-        let body = req.body;
         let task = resultData[indexTask];
 
         let taskModified = {

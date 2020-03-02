@@ -1,6 +1,8 @@
 const fs = require('fs');
 let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 let activities = fs.readFileSync(process.cwd()+'/api/models/activities.json');
+let roles = fs.readFileSync(process.cwd()+'/api/models/roles.json');
+
 let tasks = fs.readFileSync(process.cwd()+'/api/models/tasks.json');
 const {  validationResult } = require('express-validator');
 var {formatISO9075} = require('date-fns');
@@ -52,7 +54,7 @@ exports.addUser = async (req, res) => {
     }
     let body = req.body;
     let resultData = await JSON.parse(users).users;
-
+    const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.role_id);
     let newUser = {
         "login": body.login,
         "firstname": body.firstname,
@@ -61,7 +63,7 @@ exports.addUser = async (req, res) => {
         "password": body.password,
         "created": formatISO9075(Date.now()),
         "updated": formatISO9075(Date.now()),
-        "role_id": body.role_id,
+        "role_id": indexRoles !== -1 ? body.role_id: 1,
         "departement_id": body.departement_id,
         "id": Date.now()
     }
@@ -94,7 +96,9 @@ exports.delUser = async (req,res) => {
 exports.modifyUser = async (req, res) => {
     let resultData = await JSON.parse(users).users;
     const indexUser = resultData.findIndex((element) => element.id == req.params.id);
-    if (indexUser !== -1) {
+
+
+    if (indexUser !== -1 ) {
         let body = req.body;
         let user = resultData[indexUser];
         let userModified = {
