@@ -29,22 +29,23 @@ exports.getActivities = async (req, res) => {
     });
 }
 exports.getUniqueActivity = async (req, res) => {
-    const activitiesArr = JSON.parse(activities).activities;
-    const userArr = JSON.parse(users).users;
+    console.log('heeyeeyeyeyeyy')
+    const activitiesArr = await JSON.parse(activities).activities;
+    const userArr = await JSON.parse(users).users;
     //? Get pos of unique activity in the db
-    const indexActivity = activitiesArr.findIndex((element) => element.id == req.params.id);
+    const indexActivity = await activitiesArr.findIndex((element) => element.id == req.params.id);
     //? Request of all tasks belongs activity
     const tasksArr = await JSON.parse(tasks).tasks.filter(element => {
         return element.activities_id === activitiesArr[indexActivity].id;
     });
     //? Check if the activity has been found
-    users = await activitiesArr[indexActivity].users.map(element => {
+    const usersList = await activitiesArr[indexActivity].users.map(element => {
         console.log(element)
-        let user = userArr.findIndex(ele => element === ele.id);
+        let user =  userArr.findIndex(ele => element === ele.id);
         return userArr[user];
     });
     if (indexActivity !== -1) {
-        res.json({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr, "users":users}})
+        res.json({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr, "users":usersList}})
     } else {
         res.status(422).json({
             "errors": {
