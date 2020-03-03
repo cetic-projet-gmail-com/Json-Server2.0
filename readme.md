@@ -1,9 +1,9 @@
 # Cetic Project - JSON Server
 
-Launch Server (port 3000): Nodemon
+Launch Server (port 3000): `nodemon`
 
 ## Users
-Route: /administration/users
+Route: `/administration/users`
 Requête : Get, Get/:id, Post, Patch/:id Delete/:id
 
 ### Créer un nouvel utilisateur*
@@ -12,8 +12,8 @@ email = email,
 firstname = String,
 lastname = String,
 login = String (ex: d.pierre)
-role_id = Number (à determiner)
-departement_id = Number (à determiner)
+role_id = Number (1 for user, 2 for moderator, 3 for chef of project & 4 for admin)
+departement_id = Number (id of departement)
 
 ## Activities
 Route: /administration/activities/
@@ -80,8 +80,8 @@ jour suivant = links.nextDay
 jour précédent = links.prevDay
 ex route = /home?display=day&date=23-02-2020
 
-**Login**
-Route : /login
+## Login
+Route : `/login`
 Requête: Post
 Champs Requis:
 login = (Moderateur, User, Admin ou tout autres users encodés)
