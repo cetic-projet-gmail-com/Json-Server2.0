@@ -1,40 +1,42 @@
-Launch Server (port 3000): Nodemon
+# Cetic Project - JSON Server
 
-**Users**
-Route: /administration/users
+Launch Server (port 3000): `nodemon`
+
+## Users
+Route: `/administration/users`
 Requête : Get, Get/:id, Post, Patch/:id Delete/:id
 
-*Créer un nouvel utilisateur*
+### Créer un nouvel utilisateur*
 Champs Requis:
 email = email,
 firstname = String,
 lastname = String,
 login = String (ex: d.pierre)
-role_id = Number (à determiner)
-departement_id = Number (à determiner)
+role_id = Number (1 for user, 2 for moderator, 3 for chef of project & 4 for admin)
+departement_id = Number (id of departement)
 
-**Activities**
+## Activities
 Route: /administration/activities/
 Requête : Get, Get/:id, Post, Patch/:id Delete/:id
 
-*Poster une nouvelle Activité*
+### Poster une nouvelle Activité
 Champs Requis:
 name = String,
 description = String,
 color_code = couleur hexa (#f6f6f6)
 
-**TASKS**
+## TASKS
 Route: /administration/tasks/
 Requête : Get, Post, Patch/:id Delete/:id
 
-*Poster une nouvelle Tâche*
+### Poster une nouvelle Tâche*
 
 Champs Requis:
 name = String,
 description = String,
 activities_id = Vrai id d'une Activité
 
-**EVENT**
+## EVENT
 Route: /events
 Requête : Post, Patch/:id Delete/:id
 
@@ -49,7 +51,7 @@ tasks_id = Vrai Id d'une tâche
 (ISO9075 => 2020-02-29 09:00:00)
 https://date-fns.org/v2.8.1/docs/formatISO9075
 
-**Home Page**
+## Home Page
 Route: /home
 Requête : Get
 
@@ -78,8 +80,8 @@ jour suivant = links.nextDay
 jour précédent = links.prevDay
 ex route = /home?display=day&date=23-02-2020
 
-**Login**
-Route : /login
+## Login
+Route : `/login`
 Requête: Post
 Champs Requis:
 login = (Moderateur, User, Admin ou tout autres users encodés)
