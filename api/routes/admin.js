@@ -6,9 +6,9 @@ const url = (process.cwd()+'/api/controllers/admin/');
 const usersController = require(url +  'users');
 const activitiesController = require(url +  'activities');
 const tasksController = require(url +  'tasks');
-const departementsController = require(url + 'departements')
-const rolesController = require(url + 'roles')
-
+const departementsController = require(url + 'departements');
+const rolesController = require(url + 'roles');
+const colorsController = require(url + 'colors');
 //* ---------------------------------- Users --------------------------------- */
 
 const validPostUser = [
@@ -79,5 +79,11 @@ Router.route('/departements/:id')
 
 Router.route('/roles')
     .get(rolesController)
+;
+
+/* --------------------------------- Colors --------------------------------- */
+Router.route('/colors')
+    .get(colorsController)
+;
 Router.use((req, res) => {res.status(404).json({"errors":"404 not found!"})})
 module.exports = Router;
