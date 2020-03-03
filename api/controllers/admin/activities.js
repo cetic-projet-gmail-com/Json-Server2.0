@@ -29,7 +29,6 @@ exports.getActivities = async (req, res) => {
     });
 }
 exports.getUniqueActivity = async (req, res) => {
-    console.log('heeyeeyeyeyeyy')
     const activitiesArr = await JSON.parse(activities).activities;
     const userArr = await JSON.parse(users).users;
     //? Get pos of unique activity in the db
@@ -38,12 +37,16 @@ exports.getUniqueActivity = async (req, res) => {
     const tasksArr = await JSON.parse(tasks).tasks.filter(element => {
         return element.activities_id === activitiesArr[indexActivity].id;
     });
+    let usersList = [];
     //? Check if the activity has been found
-    const usersList = await activitiesArr[indexActivity].users.map(element => {
+    if (activitiesArr[indexActivity].users) {
+        usersList= await activitiesArr[indexActivity].users.map(element => {
         console.log(element)
         let user =  userArr.findIndex(ele => element === ele.id);
         return userArr[user];
     });
+    }
+    
     if (indexActivity !== -1) {
         res.json({ "data": {"activity": activitiesArr[indexActivity], "tasks" :tasksArr, "users":usersList}})
     } else {
