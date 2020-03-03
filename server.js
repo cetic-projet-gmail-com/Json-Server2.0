@@ -23,7 +23,7 @@ app.use(passport.initialize());
 const routes = process.cwd() + '/api/routes/';
 const GeneralRouter = require(routes +'general');
 const AdminRouter = require(routes+'admin');
-const EventsRouter = require(routes + 'events');
+//const EventsRouter = require(routes + 'events');
 
 const Login = require(process.cwd() + '/api/controllers/login')
 // Show method of all request
@@ -61,7 +61,7 @@ app.all('*', (req, res, next) => {
 // SPECIFIC ROUTES
 
 app.use('/administration', AdminRouter);
-app.use('/events', EventsRouter);
+// app.use('/events', EventsRouter);
 app.use('/login', Login)
 app.use('/', GeneralRouter);
 
