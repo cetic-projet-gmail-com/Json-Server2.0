@@ -1,0 +1,16 @@
+{
+    "types": [
+        {
+            "id": 1,
+            "name": "mission"
+        },
+        {
+            "id": 2,
+            "name": "projets"
+        },
+        {
+            "id": 3,
+            "name": "autres"
+        }
+    ]
+}

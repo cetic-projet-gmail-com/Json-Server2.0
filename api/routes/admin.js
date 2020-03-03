@@ -9,6 +9,7 @@ const tasksController = require(url +  'tasks');
 const departementsController = require(url + 'departements');
 const rolesController = require(url + 'roles');
 const colorsController = require(url + 'colors');
+const atypescontrollers = require(url + 'atypes');
 //* ---------------------------------- Users --------------------------------- */
 
 const validPostUser = [
@@ -85,5 +86,9 @@ Router.route('/roles')
 Router.route('/colors')
     .get(colorsController)
 ;
+
+/* ---------------------------------- atype --------------------------------- */
+Router.route('/atypes')
+    .get(atypescontrollers)
 Router.use((req, res) => {res.status(404).json({"errors":"404 not found!"})})
 module.exports = Router;
