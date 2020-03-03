@@ -1,6 +1,6 @@
 // const events = require('../models/events.json');
 const fs = require('fs');
-let eventsJSON = fs.readFileSync(process.cwd()+'/api/models/events.json');
+// let eventsJSON = fs.readFileSync(process.cwd()+'/api/models/events.json');
 let events = fs.readFileSync(process.cwd()+'/api/models/events.json');
 let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 
@@ -24,7 +24,7 @@ exports.index = async (req, res) => {
             return date[2] + "-" + date[1] + "-" + date[0];
         }
         //? Return Array if events start date = query date !(compare whitout time)
-        let events = await JSON.parse(eventsJSON).events.filter(element => {
+        let eventsArr = await JSON.parse(events).events.filter(element => {
             return format(new Date(element.start), dateFormat) === dayFormated;
         });
 
@@ -38,7 +38,7 @@ exports.index = async (req, res) => {
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
-                "events": events
+                "events": eventsArr
             }
         });
         
@@ -48,7 +48,7 @@ exports.index = async (req, res) => {
         let month = req.query.month ? parseInt(req.query.month) - 1 : today.getMonth();
         let year = req.query.year ? parseInt(req.query.year) : today.getFullYear();
 
-        let events = await JSON.parse(eventsJSON).events.filter(element => {
+        let eventsArr = await JSON.parse(events).events.filter(element => {
             let tmpDate = new Date(element.start);
             return tmpDate.getMonth() === month && tmpDate.getFullYear() === year;
         });
@@ -64,7 +64,7 @@ exports.index = async (req, res) => {
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
-                "events": events
+                "events": eventsArr
             }
         });
         
@@ -72,7 +72,7 @@ exports.index = async (req, res) => {
         let weekNumber = req.query.week ? parseInt(req.query.week) : getWeek(today);
         let year = req.query.year ? parseInt(req.query.year) : today.getFullYear();
 
-        let events = await JSON.parse(eventsJSON).events.filter(element => {
+        let eventsArr = await JSON.parse(events).events.filter(element => {
             let elemWeek = getWeek(new Date(element.start));
             if (getWeekYear(new Date(element.start)) === year) {
                 return elemWeek === weekNumber;
@@ -94,7 +94,7 @@ exports.index = async (req, res) => {
             "data": {
                 "activities": JSON.parse(activities).activities,
                 "tasks": JSON.parse(tasks).tasks,
-                "events": events
+                "events": eventsArr
             }
         });
     }
