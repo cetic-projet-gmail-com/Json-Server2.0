@@ -12,8 +12,9 @@ exports.postTasks = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
-    const resultData = await JSON.parse(activities).activities;
-    const indexActivity = resultData.findIndex((element) => element.id == req.body.activities_id);
+    const indexActivity = await JSON.parse(activities).activities.findIndex((element) => element.id == req.body.activities_id);
+    let resultData = await JSON.parse(tasks).tasks;
+
     if (indexActivity !==-1) {
         let body = req.body;
         let newTask = {
