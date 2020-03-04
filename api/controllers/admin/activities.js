@@ -75,6 +75,7 @@ exports.postActivity = async (req, res) => {
         "ended" : false,
         "created": formatISO9075(Date.now()),
         "updated": formatISO9075(Date.now()),
+        "projectManager": body.projectManager? body.projectManager: null,
         "users": [],
         "id": Date.now(),
         "a_type": {
@@ -122,7 +123,8 @@ exports.modifyActivity = async(req, res) => {
             "updated": formatISO9075(Date.now()),
             "id": activity.id,
             "a_type": body.a_type? body.a_type: activity.a_type,
-            "users": body.users? body.users: activity.users
+            "users": body.users? body.users: activity.users,
+            "projectManager": body.projectManager? body.projectManager: activity.projectManager,
         }
         resultData[indexActivity] = activityModified;
         fs.writeFileSync(process.cwd()+'/api/models/activities.json', JSON.stringify({ "activities": resultData }))

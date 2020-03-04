@@ -11,8 +11,18 @@ var {formatISO9075} = require('date-fns');
 exports.getUsers = async (req, res) => {
     let nbre = req.query.nbre ? parseInt(req.query.nbre) : 20;
     let page = req.query.page ? parseInt(req.query.page) : 1;
-
+    let paginate = req.query.paginate ? req.query.paginate : true;
+    console.log(paginate + typeof paginate)
     let usersTmp = await JSON.parse(users).users;
+    if (paginate === 'false' ) {
+        let usersArr = usersTmp.map(element => {
+            return {id:element.id, firstname:element.firstname, lastname: element.lastname}
+        });
+
+        return res.json({"data": { "users": usersArr }});
+    }
+
+    
     let usersArr = usersTmp
         .slice((page - 1) * nbre, page * nbre)
         .map(element => {
