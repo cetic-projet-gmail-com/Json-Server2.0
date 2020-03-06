@@ -29,7 +29,7 @@ exports.index = async (req, res) => {
         });
 
         let route = '/home?display=day&date='
-        res.json({/*
+        return res.status(200).json({/*
             "links": {
                 "currentDay": route + dayFormated,
                 "prevDay": route + format(addDays(Date.parse(day), 1), dateFormat),
@@ -55,7 +55,7 @@ exports.index = async (req, res) => {
         //let prevMonth = month === 0 ? "12&year" + (year - 1) : month + "&year=" + year;
         //let nextMonth = month === 11 ? "01&year" + (year + 1) : (month + 2) + "&year=" + year;
         //let route = "/home?display=month&month=";
-        res.json({
+        return res.status(200).json({
             /*"links": {
                 "currentMonth": route + (month + 1) + "&year=" + year,
                 "prevMonth": route + prevMonth,
@@ -73,7 +73,7 @@ exports.index = async (req, res) => {
         let year = req.query.year ? parseInt(req.query.year) : today.getFullYear();
 
         let eventsArr = await JSON.parse(events).events.filter(element => {
-            let elemWeek = getWeek(new Date(element.start));
+            let elemWeek = getWeek(new Date(element.start), {weekStartsOn :1});
             if (getWeekYear(new Date(element.start)) === year) {
                 return elemWeek === weekNumber;
             }
@@ -85,7 +85,7 @@ exports.index = async (req, res) => {
 
         let route = "/home?week=";
 
-        res.json({/*
+        return res.status(200).json({/*
             "links": {
                 "currentWeek": route + weekNumber + "&year=" + year,
                 "prevWeek": route + prevWeek,
@@ -104,6 +104,7 @@ exports.index = async (req, res) => {
 exports.postEvent = async(req,res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors)
         return res.status(422).json({ errors: errors.array() });
     }
     const indexTask = await JSON.parse(tasks).tasks.findIndex((element) => element.id == req.body.tasks_id);
@@ -127,9 +128,9 @@ exports.postEvent = async(req,res) => {
         }
         resultData.push(newEvent);
         fs.writeFileSync(process.cwd()+  '/api/models/events.json', JSON.stringify({ "events": resultData }));
-        res.json({"infos" : "event created", "data" : {"event" : newEvent}});
+        return res.json({"infos" : "event created", "data" : {"event" : newEvent}});
     } else {
-        res.status(200).json({
+        return res.status(200).json({
             "errors": {
                 "source": "/events",
                 "title": "tasks_id Not Found",
@@ -163,7 +164,7 @@ exports.upEvent = async (req, res) => {
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }))
         res.json({ "infos": "event modified", "data": {"event" : resultData[indexEvent] }});
     } else {
-        res.status(422).jsonp({
+        res.status(422).json({
             "errors": {
                 "source": "/administration/events/:" + req.params.id ,
                 "title": "Event Not Found",
@@ -183,7 +184,7 @@ exports.delEvent = async(req, res) => {
         res.json({ "infos": event.description + " deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }));
     } else {
-        res.status(422).jsonp({
+        res.status(422).json({
             "errors": {
                 "source": "/events/:" + req.params.id,
                 "title": "Event Not Found",

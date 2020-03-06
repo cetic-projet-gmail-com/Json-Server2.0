@@ -4,6 +4,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
+
 // const bodyParser = require('body-parser');
 
 const app = express();
@@ -60,10 +61,10 @@ app.all('*', (req, res, next) => {
 })
 // SPECIFIC ROUTES
 
-app.use('/administration', AdminRouter);
+app.use('/administration',  AdminRouter);
 // app.use('/events', EventsRouter);
 app.use('/login', Login)
-app.use('/', GeneralRouter);
+app.use('/',  GeneralRouter);
 
 
 app.listen(3000, () => {

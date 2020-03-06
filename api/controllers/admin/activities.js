@@ -2,6 +2,8 @@ const fs = require('fs');
 let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 let activities = fs.readFileSync(process.cwd()+'/api/models/activities.json');
 let tasks = fs.readFileSync(process.cwd()+'/api/models/tasks.json');
+let a_types = fs.readFileSync(process.cwd()+'/api/models/a_types.json');
+
 const {  validationResult } = require('express-validator');
 var {formatISO9075} = require('date-fns');
 
@@ -66,6 +68,8 @@ exports.postActivity = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
+    let a_typesArr = await JSON.parse(a_types).types;
+    const a_type_id = a_typesArr.findIndex((element) => element.id == req.body.a_type_id)
     let body = req.body;
     let resultData = await JSON.parse(activities).activities;
     let newActivity = {
@@ -78,10 +82,7 @@ exports.postActivity = async (req, res) => {
         "projectManager": body.projectManager? body.projectManager: null,
         "users": [],
         "id": Date.now(),
-        "a_type": {
-            "name": "",
-            "id": 1
-        }
+        "a_type": a_typesArr[a_type_id]
     }
     resultData.push(newActivity);
     fs.writeFileSync(process.cwd() + '/api/models/activities.json', JSON.stringify({ "activities": resultData }));
@@ -91,7 +92,7 @@ exports.postActivity = async (req, res) => {
 exports.delActivity = async(req, res) => {
     let resultData = await JSON.parse(activities).activities;
     const indexActivity = resultData.findIndex((element) => element.id == req.params.id);
-
+    
     let activity = resultData[indexActivity];
     if (indexActivity !== -1) {
         resultData.splice(indexActivity, 1);
@@ -111,6 +112,8 @@ exports.delActivity = async(req, res) => {
 exports.modifyActivity = async(req, res) => {
     let resultData = await JSON.parse(activities).activities;
     const indexActivity = resultData.findIndex((element) => element.id == req.params.id);
+    let a_typesArr = await JSON.parse(a_types).types;
+    const a_type_id = a_typesArr.findIndex((element) => element.id == req.body.a_type_id)
     if (indexActivity !== -1) {
         let body = req.body;
         let activity = resultData[indexActivity];
@@ -122,7 +125,7 @@ exports.modifyActivity = async(req, res) => {
             "created": activity.created,
             "updated": formatISO9075(Date.now()),
             "id": activity.id,
-            "a_type": body.a_type? body.a_type: activity.a_type,
+            "a_type": body.a_type_id ? a_typesArr[a_type_id] :activity.a_type,
             "users": body.users? body.users: activity.users,
             "projectManager": body.projectManager? body.projectManager: activity.projectManager,
         }
