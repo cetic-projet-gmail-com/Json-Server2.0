@@ -74,6 +74,7 @@ Router.route('/departements')
 Router.route('/departements/:id')
     .patch(departementsController.upDepart)
     .get(departementsController.getUniqueDepart)
+    .delete(departementsController.deleteDepartement)
 ;
 
 //* ---------------------------------- Roles --------------------------------- */

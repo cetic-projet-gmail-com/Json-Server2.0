@@ -102,6 +102,30 @@ exports.upDepart = async (req, res) => {
         }});
     }
 }
-async function  checkResponsableId(body) {
+
+exports.deleteDepartement = async (req, res) => {
+    const datas = await JSON.parse(departements).departements;
+    const index = await datas.findIndex(element => {return element.id == req.params.id});
+    console.log(index)
+
+    if (index !== -1) {
+        
+        // let departement = data[index];
+        datas.splice(index, 1);
+        res.status(200).json({ "infos":  "departement deleted" });
+        fs.writeFileSync(process.cwd()+'/api/models/departements.json', JSON.stringify({ "departements": datas }));
+    } else {
+        return res.status(422).json({
+            "errors": {
+                "source": "/administration/departements/:" + req.params.id,
+                "title": "deârtemenent Not Found",
+                "detail": "Check if the id has been altered."
+            }
+        });
+    }
+}
+ async function  checkResponsableId(body) {
     return await JSON.parse(users).users.findIndex((element) => element.id === body.responsable_id);
+
+
 }
