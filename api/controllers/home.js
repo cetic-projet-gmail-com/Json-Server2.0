@@ -128,7 +128,7 @@ exports.postEvent = async(req,res) => {
         }
         resultData.push(newEvent);
         fs.writeFileSync(process.cwd()+  '/api/models/events.json', JSON.stringify({ "events": resultData }));
-        return res.json({"infos" : "event created", "data" : {"event" : newEvent}});
+        return res.status(200).json({"infos" : "event created", "data" : {"event" : newEvent}});
     } else {
         return res.status(200).json({
             "errors": {
@@ -162,7 +162,7 @@ exports.upEvent = async (req, res) => {
         }
         resultData[indexEvent] = eventModified;
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }))
-        res.json({ "infos": "event modified", "data": {"event" : resultData[indexEvent] }});
+        res.status(200).json({ "infos": "event modified", "data": {"event" : resultData[indexEvent] }});
     } else {
         res.status(422).json({
             "errors": {
@@ -181,7 +181,7 @@ exports.delEvent = async(req, res) => {
     let event = resultData[indexEvent];
     if (indexEvent !== -1) {
         resultData.splice(indexEvent, 1);
-        res.json({ "infos": event.description + " deleted" });
+        res.status(200).json({ "infos": event.description + " deleted" });
         fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }));
     } else {
         res.status(422).json({
