@@ -7,7 +7,7 @@ let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 let activities = fs.readFileSync(process.cwd()+'/api/models/activities.json');
 let tasks = fs.readFileSync(process.cwd()+'/api/models/tasks.json');
 
-let { getWeek, format, addDays, getWeekYear, getISOWeeksInYear } = require('date-fns');
+let { getWeek, format, addHours, getWeekYear } = require('date-fns');
 const {  validationResult } = require('express-validator');
 var {formatISO9075,differenceInMinutes, parseISO} = require('date-fns');
 
@@ -107,33 +107,35 @@ exports.postEvent = async(req,res) => {
         console.log(errors)
         return res.status(422).json({ errors: errors.array() });
     }
-    const indexTask = await JSON.parse(tasks).tasks.findIndex((element) => element.id == req.body.tasks_id);
+    const indexTask = await JSON.parse(tasks).tasks.findIndex((element) => element.id == req.body.taskId);
     if (indexTask !==-1) {
         let body = req.body;
         usersArr = await JSON.parse(users).users;
         let resultData = await JSON.parse(events).events;
-        let start = parseISO(body.start);
-        let end = parseISO(body.end);
-        let duration = await differenceInMinutes(end, start);
+        // console.log(body.start) //? Simulate hour sql
+        let start = addHours(parseISO((body.start)),-1);
+        // console.log(start) //? Hour with one hour less - true event Hour
+        let end = addHours(parseISO(body.end), -1);
+        // let duration = await differenceInMinutes(end, start);
         let newEvent = {
             "id": Date.now(),
-            "duration": duration,
+            // "duration": duration,
             "start": formatISO9075(start),
             "end": formatISO9075(end),
             "created": formatISO9075(Date.now()),
             "updated": formatISO9075(Date.now()),
             "description": body.description,
             "user_id": usersArr[Math.floor(Math.random() * Math.floor(usersArr.length))].id,
-            "tasks_id": body.tasks_id
+            "taskId": body.taskId
         }
         resultData.push(newEvent);
         fs.writeFileSync(process.cwd()+  '/api/models/events.json', JSON.stringify({ "events": resultData }));
-        return res.status(200).json({"infos" : "event created", "data" : {"event" : newEvent}});
+        return res.status(200).json({"infos" : "event created", "event" : newEvent});
     } else {
         return res.status(200).json({
             "errors": {
                 "source": "/events",
-                "title": "tasks_id Not Found",
+                "title": "taskId Not Found",
                 "detail": "Check if the id has been altered."
             }});
     }
@@ -145,24 +147,24 @@ exports.upEvent = async (req, res) => {
     if (indexEvent !== -1) {
         let body = req.body;
         let event = resultData[indexEvent];
-        let start = body.start? parseISO(body.start): parseISO(event.start);
-        let end = body.end? parseISO(body.end): parseISO(event.end);
-        let duration = await differenceInMinutes(end, start);
-        console.log(duration)
+        let start = body.start? addHours(parseISO(body.start), -1): parseISO(event.start);
+        let end = body.end? addHours(parseISO(body.end),-1): parseISO(event.end);
+        // let duration = await differenceInMinutes(end, start);
         let eventModified = {
             "id": event.id,
-            "duration": duration,
+            // "duration": duration,
             "start": formatISO9075(start),
             "end": formatISO9075(end),
             "created": event.created,
             "updated": formatISO9075(Date.now()),
             "description": body.description ? body.description: event.description,
             "user_id": event.user_id,
-            "tasks_id": event.tasks_id
+            "taskId": event.taskId
         }
         resultData[indexEvent] = eventModified;
-        fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }))
-        res.status(200).json({ "infos": "event modified", "data": {"event" : resultData[indexEvent] }});
+        fs.writeFileSync(process.cwd()+'/api/models/events.json', JSON.stringify({ "events": resultData }));
+        // console.log(resultData[indexEvent] )
+        res.status(200).json({ "infos": "event modified", "event" : resultData[indexEvent] });
     } else {
         res.status(422).json({
             "errors": {

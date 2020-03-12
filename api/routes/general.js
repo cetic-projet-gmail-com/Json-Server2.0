@@ -7,7 +7,7 @@ const homeController = require('../controllers/home');
 const generalController = require('../controllers/general');
 
 const validPostEvent = [
-    check("tasks_id").notEmpty(),
+    check("taskId").notEmpty(),
     check("start").isISO8601(),
     check("end").isISO8601(),
     check("description").notEmpty(),
