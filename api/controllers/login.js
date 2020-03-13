@@ -25,7 +25,7 @@ Router.route('/').post(async (req, res) => {
             });
         } else {
             console.log(info)
-            res.status(401);
+            res.status(400);
             res.json({"errors" : info});
         }
     })(req, res);
@@ -39,6 +39,9 @@ function generateJwt(user) {
     return jwt.sign({
         _id: user.id,
         login: this.login,
+        fName: user.firstname,
+        lName: user.lastname,
+        role: user.role_id,
         exp: parseInt(expiry.getTime() / 1000),
     }, "gWC93b#gg^s9"); 
 }
