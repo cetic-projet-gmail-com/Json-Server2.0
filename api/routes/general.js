@@ -8,9 +8,15 @@ const generalController = require('../controllers/general');
 
 const validPostEvent = [
     check("taskId").notEmpty(),
-    check("start").isISO8601(),
-    check("end").isISO8601(),
+    check("startAt").isISO8601(),
+    check("endAt").isISO8601(),
     check("description").notEmpty(),
+];
+const validPatchEvent = [
+    // check("taskId").notEmpty() || check("taskId").isEmpty(),
+    check("startAt").isISO8601(),
+    check("endAt").isISO8601(),
+    // check("description").isEmpty(),
 ];
 
 var auth = jwtTwo({
@@ -18,7 +24,7 @@ var auth = jwtTwo({
     userProperty: 'payload'
 });
 Router.route('/home/:id')
-    .patch(homeController.upEvent)
+    .patch(validPatchEvent, homeController.upEvent)
     .delete(homeController.delEvent)
 ;
 Router.route('/home')

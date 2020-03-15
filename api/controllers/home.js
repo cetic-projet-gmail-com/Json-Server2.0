@@ -25,7 +25,7 @@ exports.index = async (req, res) => {
         }
         //? Return Array if events start date = query date !(compare whitout time)
         let eventsArr = await JSON.parse(events).events.filter(element => {
-            return format(new Date(element.start), dateFormat) === dayFormated;
+            return format(new Date(element.startAt), dateFormat) === dayFormated;
         });
 
         let route = '/home?display=day&date='
@@ -49,7 +49,7 @@ exports.index = async (req, res) => {
         let year = req.query.year ? parseInt(req.query.year) : today.getFullYear();
 
         let eventsArr = await JSON.parse(events).events.filter(element => {
-            let tmpDate = new Date(element.start);
+            let tmpDate = new Date(element.startAt);
             return tmpDate.getMonth() === month && tmpDate.getFullYear() === year;
         });
         //let prevMonth = month === 0 ? "12&year" + (year - 1) : month + "&year=" + year;
@@ -73,8 +73,8 @@ exports.index = async (req, res) => {
         let year = req.query.year ? parseInt(req.query.year) : today.getFullYear();
 
         let eventsArr = await JSON.parse(events).events.filter(element => {
-            let elemWeek = getWeek(new Date(element.start), {weekStartsOn :1});
-            if (getWeekYear(new Date(element.start)) === year) {
+            let elemWeek = getWeek(new Date(element.startAt), {weekStartsOn :1});
+            if (getWeekYear(new Date(element.startAt)) === year) {
                 return elemWeek === weekNumber;
             }
         });
@@ -113,15 +113,15 @@ exports.postEvent = async(req,res) => {
         usersArr = await JSON.parse(users).users;
         let resultData = await JSON.parse(events).events;
         // console.log(body.start) //? Simulate hour sql
-        let start = addHours(parseISO((body.start)),-1);
+        let start = addHours(parseISO((body.startAt)),-1);
         // console.log(start) //? Hour with one hour less - true event Hour
-        let end = addHours(parseISO(body.end), -1);
+        let end = addHours(parseISO(body.endAt), -1);
         // let duration = await differenceInMinutes(end, start);
         let newEvent = {
             "id": Date.now(),
             // "duration": duration,
-            "start": formatISO9075(start),
-            "end": formatISO9075(end),
+            "startAt": formatISO9075(start),
+            "endAt": formatISO9075(end),
             "created": formatISO9075(Date.now()),
             "updated": formatISO9075(Date.now()),
             "description": body.description,
@@ -142,19 +142,24 @@ exports.postEvent = async(req,res) => {
 }
 //? Update
 exports.upEvent = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors)
+        return res.status(422).json({ errors: errors.array() });
+    }
     let resultData = await JSON.parse(events).events;
     const indexEvent = resultData.findIndex((element) => element.id == req.params.id);
     if (indexEvent !== -1) {
         let body = req.body;
         let event = resultData[indexEvent];
-        let start = body.start? addHours(parseISO(body.start), -1): parseISO(event.start);
-        let end = body.end? addHours(parseISO(body.end),-1): parseISO(event.end);
+        let start = body.startAt? addHours(parseISO(body.startAt), -1): parseISO(event.startAt);
+        let end = body.endAt? addHours(parseISO(body.endAt),-1): parseISO(event.endAt);
         // let duration = await differenceInMinutes(end, start);
         let eventModified = {
             "id": event.id,
             // "duration": duration,
-            "start": formatISO9075(start),
-            "end": formatISO9075(end),
+            "startAt": formatISO9075(start),
+            "endAt": formatISO9075(end),
             "created": event.created,
             "updated": formatISO9075(Date.now()),
             "description": body.description ? body.description: event.description,

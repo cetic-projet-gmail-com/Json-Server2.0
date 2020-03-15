@@ -8,16 +8,16 @@ let users = fs.readFileSync(process.cwd()+'/api/models/users.json');
 
 //?Read
 exports.getDeparts = async (req, res) => {
-    const datas = await JSON.parse(departements).departements;
+    const datas = await JSON.parse(departements).departments;
     let nbre = req.query.nbre ? parseInt(req.query.nbre) : 20;
     let page = req.query.page ? parseInt(req.query.page) : 1;
 
     let datasRes = datas
     .slice((page - 1) * nbre, page * nbre)
     .map(element => {
-        return { "id": element.id, "name": element.name, "responsable_id": element.responsable_id };
+        return { "id": element.id, "name": element.name, "responsibleId": element.responsibleId };
     });
-    let route = "/administration/departements?page=";
+    let route = "/administration/departments?page=";
 
     res.jsonp({
         "links": {
@@ -27,16 +27,16 @@ exports.getDeparts = async (req, res) => {
             "first": page > 1 ? route + "1&nbre=" + nbre : undefined,
             "last": page < datas.length / nbre ? route + Math.round(Math.ceil(datas.length / nbre)) + "&nbre=" + nbre : undefined
         },
-        "data": {"departement": datasRes }
+        "data": {"departments": datasRes }
     });
 }
 
 exports.getUniqueDepart = async (req, res) => {
-    const datas = await JSON.parse(departements).departements;
+    const datas = await JSON.parse(departements).departments;
     const index = await datas.findIndex(element => {return element.id == req.params.id});
 
     if (index !==-1) {
-        res.json({"data": { "departement": datas[index] }});
+        res.json({"data": { "department": datas[index] }});
     } else {
         res.status.json({"errors": {
                 "source": "/administration/departement/:" + req.params.id,
@@ -55,31 +55,31 @@ exports.createDepart = async (req, res) => {
     }
     const responsable = checkResponsableId(req.body);
     if (responsable !== -1) {
-        const datas = await JSON.parse(departements).departements;
+        const datas = await JSON.parse(departements).departments;
 
         let newDepartement = {
             "id" : Date.now(),
             "name" : req.body.name,
-            "responsable_id" : req.body.responsable_id,
-            "created" : formatISO9075(Date.now()),
+            "responsibleId" : req.body.responsibleId,
+            "createdAt" : formatISO9075(Date.now()),
             "updated" : formatISO9075(Date.now())
         }
         datas.push(newDepartement);
-        fs.writeFileSync(process.cwd() + '/api/models/departements.json', JSON.stringify({ "departements": datas }));
-        res.json({"infos": "departement created", "data" : {"departement" : newDepartement}});
+        fs.writeFileSync(process.cwd() + '/api/models/departments.json', JSON.stringify({ "departments": datas }));
+        res.json({"infos": "departement createdAt", "data" : {"department" : newDepartement}});
     } else {
         res.status(422).json( {"errors": {
             "source": "/administration/departement/",
-            "title": "responsable_id not found",
+            "title": "responsibleId not found",
             "detail": "Check if the id has been altered or been remove."}
         });
     }
 }
 
 exports.upDepart = async (req, res) => {
-    const datas = await JSON.parse(departements).departements;
+    const datas = await JSON.parse(departements).departments;
     const index = await datas.findIndex(element => {return element.id == req.params.id});
-    let responsable = req.body.responsable_id ? await checkResponsableId(req.body) : datas[index].responsable_id;
+    let responsable = req.body.responsibleId ? await checkResponsableId(req.body) : datas[index].responsibleId;
     console.log(index + " " + responsable)
     if (responsable !== -1 && index !==-1) {
         let departement = datas[index];
@@ -87,24 +87,24 @@ exports.upDepart = async (req, res) => {
         let departementModified = {
             "id" : departement.id,
             "name" : req.body.name? req.body.name : departement.name,
-            "responsable_id" : req.body.responsable_id? req.body.responsable_id: departement.responsable_id,
-            "created" : departement.created,
-            "updated" : formatISO9075(Date.now())
+            "responsibleId" : req.body.responsibleId? req.body.responsibleId: departement.responsibleId,
+            "createdAt" : departement.createdAt,
+            "updatedAt" : formatISO9075(Date.now())
         }
         datas[index] = departementModified;
-        fs.writeFileSync(process.cwd() + '/api/models/departements.json', JSON.stringify({ "departements": datas }));
-        res.jsonp({"infos" : "departement updated", "data" : {"departement" : datas[index]}});
+        fs.writeFileSync(process.cwd() + '/api/models/departments.json', JSON.stringify({ "departments": datas }));
+        res.jsonp({"infos" : "departement updated", "data" : {"department" : datas[index]}});
     } else {
         res.status(422).json({ "errors": {
             "source": "/administration/activities/:" + req.params.id,
-            "title": "Activity or responsable_id",
+            "title": "Activity or responsibleId",
             "detail": "Check if the ids has been altered."
         }});
     }
 }
 
 exports.deleteDepartement = async (req, res) => {
-    const datas = await JSON.parse(departements).departements;
+    const datas = await JSON.parse(departements).departments;
     const index = await datas.findIndex(element => {return element.id == req.params.id});
     console.log(index)
 
@@ -112,12 +112,12 @@ exports.deleteDepartement = async (req, res) => {
         
         // let departement = data[index];
         datas.splice(index, 1);
-        res.status(200).json({ "infos":  "departement deleted" });
-        fs.writeFileSync(process.cwd()+'/api/models/departements.json', JSON.stringify({ "departements": datas }));
+        res.status(200).json({ "infos":  "department deleted" });
+        fs.writeFileSync(process.cwd()+'/api/models/departments.json', JSON.stringify({ "departments": datas }));
     } else {
         return res.status(422).json({
             "errors": {
-                "source": "/administration/departements/:" + req.params.id,
+                "source": "/administration/departments/:" + req.params.id,
                 "title": "deârtemenent Not Found",
                 "detail": "Check if the id has been altered."
             }
@@ -125,7 +125,7 @@ exports.deleteDepartement = async (req, res) => {
     }
 }
  async function  checkResponsableId(body) {
-    return await JSON.parse(users).users.findIndex((element) => element.id === body.responsable_id);
+    return await JSON.parse(users).users.findIndex((element) => element.id === body.responsibleId);
 
 
 }

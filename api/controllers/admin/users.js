@@ -16,7 +16,7 @@ exports.getUsers = async (req, res) => {
     let usersTmp = await JSON.parse(users).users;
     if (paginate === 'false' ) {
         let usersArr = usersTmp.map(element => {
-            return {id:element.id, firstname:element.firstname, lastname: element.lastname}
+            return {id:element.id, firstName:element.firstName, lastName: element.lastName}
         });
 
         return res.json({"data": { "users": usersArr }});
@@ -26,7 +26,7 @@ exports.getUsers = async (req, res) => {
     let usersArr = usersTmp
         .slice((page - 1) * nbre, page * nbre)
         .map(element => {
-            return { "id": element.id, "firstname": element.firstname, "lastname": element.lastname };
+            return { "id": element.id, "firstName": element.firstName, "lastName": element.lastName };
         });
     let route = "/administration/users?page=";
     res.json({
@@ -64,22 +64,22 @@ exports.addUser = async (req, res) => {
     }
     let body = req.body;
     let resultData = await JSON.parse(users).users;
-    const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.role_id);
+    const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.roleId);
     let newUser = {
         "login": body.login,
-        "firstname": body.firstname,
-        "lastname": body.lastname,
+        "firstName": body.firstName,
+        "lastName": body.lastName,
         "email": body.email,
         "password": body.password,
-        "created": formatISO9075(Date.now()),
-        "updated": formatISO9075(Date.now()),
-        "role_id": indexRoles !== -1 ? body.role_id: 1,
-        "departement_id": body.departement_id,
+        "createdAt": formatISO9075(Date.now()),
+        "updatedAt": formatISO9075(Date.now()),
+        "roleId": indexRoles !== -1 ? body.roleId: 1,
+        "departmentId": body.departmentId,
         "id": Date.now()
     }
     resultData.push(newUser);
     fs.writeFileSync(process.cwd()+'/api/models/users.json', JSON.stringify({ "users": resultData }));
-    res.jsonp({"infos": "user created", "data" : {"user" : newUser}});
+    res.jsonp({"infos": "user createdAt", "data" : {"user" : newUser}});
 }
 //? Remove
 exports.delUser = async (req,res) => {
@@ -113,14 +113,14 @@ exports.modifyUser = async (req, res) => {
         let user = resultData[indexUser];
         let userModified = {
             "login": body.login ? body.login : user.login,
-            "firstname": body.firstname ? body.firstname : user.firstname,
-            "lastname": body.lastname ? body.lastname : user.lastname,
+            "firstName": body.firstName ? body.firstName : user.firstName,
+            "lastName": body.lastName ? body.lastName : user.lastName,
             "email": body.email ? body.email : user.email,
             "password": body.password ? body.password : user.password,
-            "created": user.created,
-            "updated": formatISO9075(Date.now()),
-            "role_id": body.role_id ? body.role_id : user.role_id,
-            "departement_id": body.departement_id ? body.departement_id : user.departement_id,
+            "createdAt": user.createdAt,
+            "updatedAt": formatISO9075(Date.now()),
+            "roleId": body.roleId ? body.roleId : user.roleId,
+            "departmentId": body.departmentId ? body.departmentId : user.departmentId,
             "id": user.id
         }
         resultData[indexUser] = userModified;

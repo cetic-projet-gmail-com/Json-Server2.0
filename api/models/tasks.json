@@ -2,74 +2,74 @@
     "tasks": [
         {
             "id": 2001,
-            "activities_id": 1001,
+            "activityId": 1001,
             "name": "Act 1.1",
             "description": "Réalisaition des premières esquisses des views",
             "done": "",
-            "created": "2020-02-17 10:00:00"
+            "createdAt": "2020-02-17 10:00:00"
         },
         {
             "id": 2002,
-            "activities_id": 1001,
+            "activityId": 1001,
             "name": "Act 1.2",
             "description": "Architecture de la DataBases",
             "done": "",
-            "created": "2020-02-17 10:00:00"
+            "createdAt": "2020-02-17 10:00:00"
         },
         {
             "id": 2003,
-            "activities_id": 1002,
+            "activityId": 1002,
             "name": "Act 2.1",
             "description": "Liens entre les différents écrans",
             "done": "",
-            "created": "2020-02-20 14:30:00"
+            "createdAt": "2020-02-20 14:30:00"
         },
         {
             "id": 2004,
-            "activities_id": 1002,
+            "activityId": 1002,
             "name": "Act 2.2",
             "description": "Architecture de la DataBases",
             "done": "",
-            "created": "2020-02-20 14:30:00"
+            "createdAt": "2020-02-20 14:30:00"
         },
         {
             "id": 2006,
-            "activities_id": 1003,
+            "activityId": 1003,
             "name": "Act 3.1",
             "description": "Faire un compte rendu",
             "done": "",
-            "created": "2020-02-23 11:15:00"
+            "createdAt": "2020-02-23 11:15:00"
         },
         {
             "id": 2007,
-            "activities_id": 1003,
+            "activityId": 1003,
             "name": "Act 3.2",
             "description": "Redisgn Site",
             "done": "",
-            "created": "2020-02-23 11:15:00"
+            "createdAt": "2020-02-23 11:15:00"
         },
         {
             "id": 200999,
-            "activities_id": 1003,
+            "activityId": 1003,
             "name": "Act 3.3",
             "description": "Redisgn Site",
             "done": "",
-            "created": "2020-02-23 11:15:00"
+            "createdAt": "2020-02-23 11:15:00"
         },
         {
             "id": 4552007,
-            "activities_id": 1003,
+            "activityId": 1003,
             "name": "Act 3.4",
             "description": "Redisgn Site",
             "done": "",
-            "created": "2020-02-23 11:15:00"
+            "createdAt": "2020-02-23 11:15:00"
         },
         {
-            "activities_id": 1582546829475,
+            "activityId": 1582546829475,
             "name": "Act 4.1",
             "description": "Act 4.1",
             "done": "",
-            "created": "2020-02-17 10:00:00",
+            "createdAt": "2020-02-17 10:00:00",
             "id": 1582375710771
         }
     ]

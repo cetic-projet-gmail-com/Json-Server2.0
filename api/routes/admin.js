@@ -14,11 +14,11 @@ const atypescontrollers = require(url + 'atypes');
 
 const validPostUser = [
     check("email").isEmail(),
-    check("firstname").notEmpty(),
-    check("lastname").notEmpty(),
+    check("firstName").notEmpty(),
+    check("lastName").notEmpty(),
     check("login").notEmpty(),
-    check("role_id").notEmpty(),
-    check("departement_id").notEmpty()
+    check("roleId").notEmpty(),
+    check("departmentId").notEmpty()
 ];
 
 Router.route('/users')
@@ -51,7 +51,7 @@ Router.route('/activities/:id')
 const validPostTask = [
     check("name").notEmpty(),
     check("description").notEmpty(),
-    check("activities_id").notEmpty(),
+    check("activityId").notEmpty(),
 ];
 Router.route('/tasks')
     .post(validPostTask, tasksController.postTasks)
@@ -65,13 +65,13 @@ Router.route('/tasks/:id')
 
 const validPostDepartement = [
     check("name").notEmpty(),
-    check("responsable_id").notEmpty()
+    check("responsibleId").notEmpty()
 ];
-Router.route('/departements')
+Router.route('/departments')
     .get(departementsController.getDeparts)
     .post(validPostDepartement, departementsController.createDepart)
 ;
-Router.route('/departements/:id')
+Router.route('/departments/:id')
     .patch(departementsController.upDepart)
     .get(departementsController.getUniqueDepart)
     .delete(departementsController.deleteDepartement)

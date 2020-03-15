@@ -12,14 +12,14 @@ exports.postTasks = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
-    const indexActivity = await JSON.parse(activities).activities.findIndex((element) => element.id == req.body.activities_id);
+    const indexActivity = await JSON.parse(activities).activities.findIndex((element) => element.id == req.body.activityId);
     let resultData = await JSON.parse(tasks).tasks;
 
     if (indexActivity !==-1) {
         let body = req.body;
         let newTask = {
             "id": Date.now(),
-            "activities_id": body.activities_id,
+            "activityId": body.activityId,
             "name": body.name,
             "description": body.description,
             "done": body.done? body.done: "",
@@ -49,7 +49,7 @@ exports.modifyTask = async (req, res) => {
 
         let taskModified = {
             "id": task.id,
-            "activities_id": task.activities_id,
+            "activityId": task.activityId,
             "name": body.name? body.name: task.name,
             "description": body.description? body.description: task.description,
             "done": body.done? body.done: task.done,
