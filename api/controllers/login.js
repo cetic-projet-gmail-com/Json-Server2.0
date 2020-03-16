@@ -39,8 +39,8 @@ function generateJwt(user) {
     return jwt.sign({
         _id: user.id,
         login: this.login,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: user.firstname,
+        lastName: user.lastname,
         role: user.roleId,
         exp: parseInt(expiry.getTime() / 1000),
     }, "gWC93b#gg^s9"); 
