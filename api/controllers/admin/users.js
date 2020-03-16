@@ -16,7 +16,7 @@ exports.getUsers = async (req, res) => {
     let usersTmp = await JSON.parse(users).users;
     if (paginate === 'false' ) {
         let usersArr = usersTmp.map(element => {
-            return {id:element.id, firstName:element.firstName, lastName: element.lastName}
+            return {id:element.id, firstname:element.firstname, lastname: element.lastname}
         });
 
         return res.json({"data": { "users": usersArr }});
@@ -26,7 +26,7 @@ exports.getUsers = async (req, res) => {
     let usersArr = usersTmp
         .slice((page - 1) * nbre, page * nbre)
         .map(element => {
-            return { "id": element.id, "firstName": element.firstName, "lastName": element.lastName };
+            return { "id": element.id, "firstname": element.firstname, "lastname": element.lastname };
         });
     let route = "/administration/users?page=";
     res.json({
@@ -67,8 +67,8 @@ exports.addUser = async (req, res) => {
     const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.roleId);
     let newUser = {
         "login": body.login,
-        "firstName": body.firstName,
-        "lastName": body.lastName,
+        "firstname": body.firstname,
+        "lastname": body.lastname,
         "email": body.email,
         "password": body.password,
         "createdAt": formatISO9075(Date.now()),
@@ -113,8 +113,8 @@ exports.modifyUser = async (req, res) => {
         let user = resultData[indexUser];
         let userModified = {
             "login": body.login ? body.login : user.login,
-            "firstName": body.firstName ? body.firstName : user.firstName,
-            "lastName": body.lastName ? body.lastName : user.lastName,
+            "firstname": body.firstname ? body.firstname : user.firstname,
+            "lastname": body.lastname ? body.lastname : user.lastname,
             "email": body.email ? body.email : user.email,
             "password": body.password ? body.password : user.password,
             "createdAt": user.createdAt,

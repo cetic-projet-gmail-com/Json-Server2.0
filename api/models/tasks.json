@@ -2,7 +2,7 @@
     "tasks": [
         {
             "id": 2001,
-            "activityId": 1001,
+            "activities_id": 1001,
             "name": "Act 1.1",
             "description": "Réalisaition des premières esquisses des views",
             "done": "",
@@ -10,7 +10,7 @@
         },
         {
             "id": 2002,
-            "activityId": 1001,
+            "activities_id": 1001,
             "name": "Act 1.2",
             "description": "Architecture de la DataBases",
             "done": "",
@@ -18,7 +18,7 @@
         },
         {
             "id": 2003,
-            "activityId": 1002,
+            "activities_id": 1002,
             "name": "Act 2.1",
             "description": "Liens entre les différents écrans",
             "done": "",
@@ -26,7 +26,7 @@
         },
         {
             "id": 2004,
-            "activityId": 1002,
+            "activities_id": 1002,
             "name": "Act 2.2",
             "description": "Architecture de la DataBases",
             "done": "",
@@ -34,7 +34,7 @@
         },
         {
             "id": 2006,
-            "activityId": 1003,
+            "activities_id": 1003,
             "name": "Act 3.1",
             "description": "Faire un compte rendu",
             "done": "",
@@ -42,7 +42,7 @@
         },
         {
             "id": 2007,
-            "activityId": 1003,
+            "activities_id": 1003,
             "name": "Act 3.2",
             "description": "Redisgn Site",
             "done": "",
@@ -50,7 +50,7 @@
         },
         {
             "id": 200999,
-            "activityId": 1003,
+            "activities_id": 1003,
             "name": "Act 3.3",
             "description": "Redisgn Site",
             "done": "",
@@ -58,14 +58,14 @@
         },
         {
             "id": 4552007,
-            "activityId": 1003,
+            "activities_id": 1003,
             "name": "Act 3.4",
             "description": "Redisgn Site",
             "done": "",
             "createdAt": "2020-02-23 11:15:00"
         },
         {
-            "activityId": 1582546829475,
+            "activities_id": 1582546829475,
             "name": "Act 4.1",
             "description": "Act 4.1",
             "done": "",
