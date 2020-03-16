@@ -14,11 +14,11 @@ const atypescontrollers = require(url + 'atypes');
 
 const validPostUser = [
     check("email").isEmail(),
-    check("firstName").notEmpty(),
-    check("lastName").notEmpty(),
+    check("firstname").notEmpty(),
+    check("lastname").notEmpty(),
     check("login").notEmpty(),
-    check("roleId").notEmpty(),
-    check("departmentId").notEmpty()
+    check("role_id").notEmpty(),
+    check("departement_id").notEmpty()
 ];
 
 Router.route('/users')

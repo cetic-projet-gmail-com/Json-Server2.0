@@ -60,11 +60,13 @@ exports.getUniqueUser = async (req, res) => {
 exports.addUser = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log('hehehe')
+        console.log(res.body)
         return res.status(422).json({ errors: errors.array() });
     }
     let body = req.body;
     let resultData = await JSON.parse(users).users;
-    const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.roleId);
+    const indexRoles = await JSON.parse(roles).roles.findIndex(element => element.id === body.role_id);
     let newUser = {
         "login": body.login,
         "firstname": body.firstname,
@@ -73,8 +75,8 @@ exports.addUser = async (req, res) => {
         "password": body.password,
         "createdAt": formatISO9075(Date.now()),
         "updatedAt": formatISO9075(Date.now()),
-        "roleId": indexRoles !== -1 ? body.roleId: 1,
-        "departmentId": body.departmentId,
+        "role_id": indexRoles !== -1 ? body.role_id: 1,
+        "departement_id": body.departement_id,
         "id": Date.now()
     }
     resultData.push(newUser);
@@ -119,8 +121,8 @@ exports.modifyUser = async (req, res) => {
             "password": body.password ? body.password : user.password,
             "createdAt": user.createdAt,
             "updatedAt": formatISO9075(Date.now()),
-            "roleId": body.roleId ? body.roleId : user.roleId,
-            "departmentId": body.departmentId ? body.departmentId : user.departmentId,
+            "role_id": body.role_id ? body.role_id : user.role_id,
+            "departement_id": body.departement_id ? body.departement_id : user.departement_id,
             "id": user.id
         }
         resultData[indexUser] = userModified;
